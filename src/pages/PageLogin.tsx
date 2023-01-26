@@ -18,6 +18,12 @@ export const PageLogin = () => {
 		submitLoginForm(onBadLogin);
 	};
 
+	const handleKeyDown = (e: any) => {
+		if (e.key === 'Enter') {
+			submitLoginForm(onBadLogin);
+		}
+	};
+
 	return (
 		<div className="page pageLogin">
 			<Helmet>
@@ -36,6 +42,7 @@ export const PageLogin = () => {
 										e.target.value
 									)
 								}
+								onKeyDown={handleKeyDown}
 								value={loginForm.fields.username}
 								autoFocus
 								type="text"
@@ -54,6 +61,7 @@ export const PageLogin = () => {
 										e.target.value
 									)
 								}
+								onKeyDown={handleKeyDown}
 								value={loginForm.fields.password}
 								type="password"
 							/>
