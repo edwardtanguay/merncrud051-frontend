@@ -12,6 +12,8 @@ import {
 	IUser,
 	blankMemberInfo,
 	IMemberInfo,
+	blankAdminInfo,
+	IAdminInfo,
 } from './interfaces';
 import * as tools from './tools';
 import { cloneDeep } from 'lodash-es';
@@ -50,6 +52,7 @@ interface IAppContext {
 	clearLoginForm: () => void;
 	currentUserIsAdmin: () => boolean;
 	memberInfo: IMemberInfo;
+	adminInfo: IMemberInfo;
 	getNoAccessMessage: () => string;
 }
 
@@ -73,6 +76,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	);
 	const [currentUser, setCurrentUser] = useState<IUser>(anonymousUser);
 	const [memberInfo, setMemberInfo] = useState<IMemberInfo>(blankMemberInfo);
+	const [adminInfo, setAdminInfo] = useState<IAdminInfo>(blankAdminInfo);
 
 	const navigate = useNavigate();
 
@@ -119,8 +123,23 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		if (currentUserIsInAccessGroup('members')) {
 			console.log('group', currentUser.accessGroups.join(','));
 			(async () => {
-				const memberInfo = (await axios.get(`${backendUrl}/get-member-info`, { withCredentials: true})).data;
+				const memberInfo = (
+					await axios.get(`${backendUrl}/get-member-info`, {
+						withCredentials: true,
+					})
+				).data;
 				setMemberInfo(cloneDeep(memberInfo));
+			})();
+		}
+		if (currentUserIsInAccessGroup('admins')) {
+			console.log('group', currentUser.accessGroups.join(','));
+			(async () => {
+				const adminInfo = (
+					await axios.get(`${backendUrl}/get-admin-info`, {
+						withCredentials: true,
+					})
+				).data;
+				setAdminInfo(cloneDeep(adminInfo));
 			})();
 		}
 	}, [currentUser]);
@@ -332,7 +351,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		} else {
 			return 'You do not have access to this page.';
 		}
-	}
+	};
 	return (
 		<AppContext.Provider
 			value={{
@@ -360,7 +379,8 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				clearLoginForm,
 				currentUserIsAdmin,
 				memberInfo,
-				getNoAccessMessage
+				getNoAccessMessage,
+				adminInfo,
 			}}
 		>
 			{children}

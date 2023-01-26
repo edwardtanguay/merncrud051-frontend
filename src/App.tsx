@@ -6,6 +6,7 @@ import { PageBooks } from './pages/PageBooks';
 import { PageLogin } from './pages/PageLogin';
 import { PageLogout } from './pages/PageLogout';
 import { PageMembers } from './pages/PageMembers';
+import { PageAdmins } from './pages/PageAdmins';
 
 function App() {
 	const { adminIsLoggedIn, currentUser, currentUserIsInAccessGroup } =
@@ -19,7 +20,10 @@ function App() {
 						{currentUser.firstName} {currentUser.lastName}
 					</span>
 					{currentUserIsInAccessGroup('unapprovedMembers') && (
-						<span className="note">Your application for membership has been received and will be approved soon.</span>
+						<span className="note">
+							Your application for membership has been received
+							and will be approved soon.
+						</span>
 					)}
 				</div>
 			)}
@@ -27,6 +31,9 @@ function App() {
 				<NavLink to="/books">Books</NavLink>
 				{currentUserIsInAccessGroup('members') && (
 					<NavLink to="/members">Members</NavLink>
+				)}
+				{currentUserIsInAccessGroup('admins') && (
+					<NavLink to="/admins">Admins</NavLink>
 				)}
 				{currentUserIsInAccessGroup('loggedInUsers') ? (
 					<NavLink to="/logout">Logout</NavLink>
@@ -39,10 +46,8 @@ function App() {
 				{currentUser.username != '' && (
 					<>
 						<Route path="/books" element={<PageBooks />} />
-						{/* {currentUserIsInAccessGroup('members') && ( */}
-						{true && (
-							<Route path="/members" element={<PageMembers />} />
-						)}
+						<Route path="/members" element={<PageMembers />} />
+						<Route path="/admins" element={<PageAdmins />} />
 						{currentUserIsInAccessGroup('loggedInUsers') ? (
 							<Route path="/logout" element={<PageLogout />} />
 						) : (

@@ -66,3 +66,13 @@ export const blankMemberInfo = {
 	message: '',
 	members: []
 }
+
+export interface IAdminInfo {
+	message: string;
+	members: IUser[]
+}
+
+export const blankAdminInfo = {
+	message: '',
+	members: []
+}

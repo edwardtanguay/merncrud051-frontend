@@ -41,7 +41,7 @@ body {
 
 		span.note {
 			color: yellow;
-			font-style:italic;
+			font-style: italic;
 			display: inline-block;
 			margin-left: .5rem;
 		}
@@ -66,16 +66,25 @@ body {
 		.noAccessMessage {
 			margin-top: 1rem;
 			font-family: 'Courier New', Courier, monospace;
-			color: #555;
+			color: #777;
 			font-size: 1.5rem;
 		}
-	}
 
-	.pageMembers {
 		h2 {
 			color: rgb(200, 169, 110)
 		}
 
+	}
+
+	.pageAdmins {
+		p.message {
+			max-width: 30rem;
+			line-height: 1.4rem;
+			color: #ccc;
+		}
+	}
+	
+	.pageMembers {
 		p.message {
 			max-width: 30rem;
 			line-height: 1.4rem;
@@ -88,6 +97,7 @@ body {
 			li {
 				margin-bottom: .4rem;
 				font-size: 1.2rem;
+
 				span {
 					color: rgb(184, 184, 50);
 					font-style: italic;
