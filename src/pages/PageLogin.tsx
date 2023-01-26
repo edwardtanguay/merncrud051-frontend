@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useContext, useRef, KeyboardEvent } from 'react';
 import { AppContext } from '../AppContext';
 import { Helmet } from 'react-helmet';
 
@@ -18,7 +18,7 @@ export const PageLogin = () => {
 		submitLoginForm(onBadLogin);
 	};
 
-	const handleKeyDown = (e: any) => {
+	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === 'Enter') {
 			submitLoginForm(onBadLogin);
 		}
@@ -42,7 +42,7 @@ export const PageLogin = () => {
 										e.target.value
 									)
 								}
-								onKeyDown={handleKeyDown}
+								onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => handleKeyDown(e)}
 								value={loginForm.fields.username}
 								autoFocus
 								type="text"
@@ -61,7 +61,7 @@ export const PageLogin = () => {
 										e.target.value
 									)
 								}
-								onKeyDown={handleKeyDown}
+								onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => handleKeyDown(e)}
 								value={loginForm.fields.password}
 								type="password"
 							/>
