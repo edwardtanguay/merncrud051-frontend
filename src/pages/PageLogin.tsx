@@ -6,7 +6,8 @@ export const PageLogin = () => {
 	const {
 		appTitle,
 		loginForm,
-		changeLoginFormField
+		changeLoginFormField,
+		submitLoginForm
 	} = useContext(AppContext);
 
 	return (
@@ -33,7 +34,7 @@ export const PageLogin = () => {
 
 							<div className="buttonArea">
 						<div className="message">{loginForm.message}</div>
-								<button type="button">Submit</button>
+								<button type="button" onClick={() => submitLoginForm()}>Submit</button>
 							</div>
 						</fieldset>
 					</form>

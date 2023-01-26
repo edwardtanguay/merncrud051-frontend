@@ -1,10 +1,11 @@
 - x delete old form and all connected to it
-- .. create a formLogin object as
+- x create a formLogin object as
 	- fields
 		- username
 		- password
 	- message
 	- make state variable
 	- make interface
-- make form work so you can type in field values and they are sent to backend
-	- on the form, implement onChange
+- .. make form work so you can type in field values and they are sent to backend
+	- x on the form, implement onChange
+	- .. make button send data to backend	
