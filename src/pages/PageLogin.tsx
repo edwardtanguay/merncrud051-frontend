@@ -5,6 +5,8 @@ import { Helmet } from 'react-helmet';
 export const PageLogin = () => {
 	const {
 		appTitle,
+		loginForm,
+		changeLoginFormField
 	} = useContext(AppContext);
 
 	return (
@@ -18,21 +20,19 @@ export const PageLogin = () => {
 							<div className="row">
 								<label>Username</label>
 								<div>
-									<input autoFocus type="text" />
+									<input onChange={(e) => changeLoginFormField('username', e.target.value)} value={loginForm.fields.username} autoFocus type="text" />
 								</div>
 							</div>
 
 							<div className="row">
 								<label>Password</label>
 								<div>
-									<input type="password" />
+									<input value={loginForm.fields.password} type="password" />
 								</div>
 							</div>
 
 							<div className="buttonArea">
-								<div className="message">
-									This is a test message.
-								</div>
+						<div className="message">{loginForm.message}</div>
 								<button type="button">Submit</button>
 							</div>
 						</fieldset>
