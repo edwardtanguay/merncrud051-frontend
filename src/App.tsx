@@ -15,9 +15,12 @@ function App() {
 			<h1>Book Site</h1>
 			{currentUserIsInAccessGroup('loggedInUsers') && (
 				<div className="userArea">
-					<span>
+					<span className="userInfo">
 						{currentUser.firstName} {currentUser.lastName}
 					</span>
+					{currentUserIsInAccessGroup('unapprovedMembers') && (
+						<span className="note">Your application for membership has been received and will be approved soon.</span>
+					)}
 				</div>
 			)}
 			<nav>

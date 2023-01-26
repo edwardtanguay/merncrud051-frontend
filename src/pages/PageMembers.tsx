@@ -15,7 +15,11 @@ export const PageMembers = () => {
 					<ul>
 						{memberInfo.members.map(member => {
 							return (
-								<li key={member._id}>{member.firstName} {member.lastName}</li>
+								<li key={member._id}>{member.firstName} {member.lastName}
+									{member.accessGroups.includes('unapprovedMembers') && (
+										<span> - pending approval</span>
+							)}	
+								</li>
 						)
 					})}
 					</ul>

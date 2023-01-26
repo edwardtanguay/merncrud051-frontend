@@ -32,11 +32,18 @@ body {
 		margin-bottom: 1rem;
 		margin-top: -.7rem;
 
-		span {
+		span.userInfo {
 			background: #1c1c1c;
 			padding: .5rem;
 			border-radius: .3rem;
 			border: 1px solid #444;
+		}
+
+		span.note {
+			color: yellow;
+			font-style:italic;
+			display: inline-block;
+			margin-left: .5rem;
 		}
 	}
 
@@ -81,6 +88,10 @@ body {
 			li {
 				margin-bottom: .4rem;
 				font-size: 1.2rem;
+				span {
+					color: rgb(184, 184, 50);
+					font-style: italic;
+				}
 			}
 		}
 	}
