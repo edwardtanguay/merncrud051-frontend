@@ -1,3 +1,6 @@
-- .. show something for admins that members can't see
+- .. make members page
+- a note for unapproved members
+	- show them members page in menu
+	- but make it blank with a note, "You will be approved soon."
 
 - clean all code out that is not used
