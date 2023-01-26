@@ -8,7 +8,7 @@ export const PageLogout = () => {
 
 	useEffect(() => {
 		logUserOut();
-		navigate('/books');
+		navigate('/');
 	}, []);
 	return (<></>);
 };

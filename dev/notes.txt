@@ -1,9 +1,8 @@
 - x create currentUser as state variable
 - x show user info below site name (name and groups)
 - x logout
+- x clear login form after login
 
-- .. clear login form after login
-
-- navigate to home page on login (with callbacks)
+- .. navigate to home page on login (with callbacks)
 
 - show something for admins that members can't see
