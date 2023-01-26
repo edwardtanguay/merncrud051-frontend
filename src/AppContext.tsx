@@ -284,6 +284,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				setLoginForm({ ...blankLoginForm });
 				navigate('/');
 			} else {
+				loginForm.fields.password = '';
 				loginForm.message = 'Bad login, try again.';
 				setLoginForm(cloneDeep(loginForm));
 			}

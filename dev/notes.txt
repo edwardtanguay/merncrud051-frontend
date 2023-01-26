@@ -8,4 +8,6 @@
 	- .. user ok, password bad
 	- user bad
 
+- when click on login page, delete form fields
+
 - show something for admins that members can't see
