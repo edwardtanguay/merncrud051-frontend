@@ -2,8 +2,12 @@ import { useContext } from 'react';
 import { AppContext } from '../AppContext';
 
 export const PageAdmins = () => {
-	const { adminInfo, currentUserIsInAccessGroup, getNoAccessMessage } =
-		useContext(AppContext);
+	const {
+		adminInfo,
+		currentUserIsInAccessGroup,
+		getNoAccessMessage,
+		handleApproveMember,
+	} = useContext(AppContext);
 
 	return (
 		<div className="page pageAdmins">
@@ -13,22 +17,48 @@ export const PageAdmins = () => {
 					<p className="message">{adminInfo.message}</p>
 
 					<table>
-						<tr>
-							<th>first name</th>
-							<th>last name</th>
-							<th>access groups</th>
-						</tr>
-						{adminInfo.members.map((member) => {
-							return (
-								<tr key={member._id}>
-									<td>{member.firstName}</td>
-									<td>{member.lastName}</td>
-									<td className="accessGroups">{member.accessGroups.filter(m => !['unapprovedMembers', 'loggedInUsers'].includes(m)).join(', ')}
-								{member.accessGroups.includes('unapprovedMembers') && <button type="button">approve as member</button>}	
-									</td>
-								</tr>
-							);
-						})}
+						<thead>
+							<tr>
+								<th>first name</th>
+								<th>last name</th>
+								<th>access groups</th>
+							</tr>
+						</thead>
+						<tbody>
+							{adminInfo.members.map((member) => {
+								return (
+									<tr key={member._id}>
+										<td>{member.firstName}</td>
+										<td>{member.lastName}</td>
+										<td className="accessGroups">
+											{member.accessGroups
+												.filter(
+													(m) =>
+														![
+															'unapprovedMembers',
+															'loggedInUsers',
+														].includes(m)
+												)
+												.join(', ')}
+											{member.accessGroups.includes(
+												'unapprovedMembers'
+											) && (
+												<button
+													type="button"
+													onClick={() =>
+														handleApproveMember(
+															member
+														)
+													}
+												>
+													approve as member
+												</button>
+											)}
+										</td>
+									</tr>
+								);
+							})}
+						</tbody>
 					</table>
 				</>
 			) : (

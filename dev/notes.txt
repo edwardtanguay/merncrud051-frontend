@@ -4,7 +4,8 @@
 - x list members on members page
 - x for unapprovedMembers but make it blank with a note, "You will be approved soon."
 - .. admin page
-	- enable approval
+	- .. enable approval
+		- .. show which on click
 
 
 - parse

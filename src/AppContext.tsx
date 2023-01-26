@@ -54,6 +54,7 @@ interface IAppContext {
 	memberInfo: IMemberInfo;
 	adminInfo: IMemberInfo;
 	getNoAccessMessage: () => string;
+	handleApproveMember: (member: IUser) => void;
 }
 
 interface IAppProvider {
@@ -121,7 +122,6 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	// then any user that is logged in is loaded into currentUser
 	useEffect(() => {
 		if (currentUserIsInAccessGroup('members')) {
-			console.log('group', currentUser.accessGroups.join(','));
 			(async () => {
 				const memberInfo = (
 					await axios.get(`${backendUrl}/get-member-info`, {
@@ -132,7 +132,6 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 			})();
 		}
 		if (currentUserIsInAccessGroup('admins')) {
-			console.log('group', currentUser.accessGroups.join(','));
 			(async () => {
 				const adminInfo = (
 					await axios.get(`${backendUrl}/get-admin-info`, {
@@ -352,6 +351,10 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 			return 'You do not have access to this page.';
 		}
 	};
+
+	const handleApproveMember = (member: IUser) => {
+		console.log('approving ' + member.username);
+	}
 	return (
 		<AppContext.Provider
 			value={{
@@ -381,6 +384,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				memberInfo,
 				getNoAccessMessage,
 				adminInfo,
+				handleApproveMember,
 			}}
 		>
 			{children}
