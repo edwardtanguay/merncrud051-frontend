@@ -8,6 +8,8 @@ import {
 	ILoginForm,
 	blankLoginForm,
 	ILoginFormFields,
+	anonymousUser,
+	IUser,
 } from './interfaces';
 import * as tools from './tools';
 
@@ -40,6 +42,7 @@ interface IAppContext {
 	loginForm: ILoginForm;
 	changeLoginFormField: (fieldIdCode: string, value: string) => void;
 	submitLoginForm: () => void;
+	currentUser: IUser;
 }
 
 interface IAppProvider {
@@ -58,6 +61,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	const [isAdding, setIsAdding] = useState(false);
 	const [newBook, setNewBook] = useState<IOriginalEditFields>(blankNewBook);
 	const [loginForm, setLoginForm] = useState<ILoginForm>(blankLoginForm);
+	const [currentUser, setCurrentUser] = useState<IUser>(anonymousUser);
 
 	const loadBooks = () => {
 		(async () => {
@@ -290,7 +294,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				`${backendUrl}/login`,
 				{
 					username: loginForm.fields.username,
-					password: loginForm.fields.password
+					password: loginForm.fields.password,
 				},
 				{
 					headers: {
@@ -303,7 +307,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		} catch (e: any) {
 			console.log(`GENERAL ERROR: ${e.message}`);
 		}
-	}
+	};
 
 	return (
 		<AppContext.Provider
@@ -327,7 +331,8 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				handleSaveNewBook,
 				loginForm,
 				changeLoginFormField,
-				submitLoginForm
+				submitLoginForm,
+				currentUser,
 			}}
 		>
 			{children}
