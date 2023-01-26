@@ -7,6 +7,7 @@ import {
 	blankNewBook,
 	ILoginForm,
 	blankLoginForm,
+	ILoginFormFields,
 } from './interfaces';
 import * as tools from './tools';
 
@@ -278,14 +279,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	};
 
 	const changeLoginFormField = (fieldIdCode: string, value: string) => {
-		switch (fieldIdCode) {
-			case 'username':
-				loginForm.fields.username = value;
-				break;
-			case 'password':
-				loginForm.fields.password = value;
-				break;
-		}
+		loginForm.fields[fieldIdCode as keyof ILoginFormFields] = value;
 		setLoginForm({ ...loginForm });
 	};
 
