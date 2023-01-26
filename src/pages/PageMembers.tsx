@@ -8,7 +8,7 @@ export const PageMembers = () => {
 		<div className="page pageMembers">
 			{currentUserIsInAccessGroup('members') ? (
 				<>
-					<h2>Message</h2>
+					<h2>Welcome Members</h2>
 					<p className="message">{memberInfo.message}</p>
 
 					<h2>We currently have {memberInfo.members.length} members</h2>
