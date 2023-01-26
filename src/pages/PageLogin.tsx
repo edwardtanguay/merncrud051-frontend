@@ -1,9 +1,9 @@
-import { useContext, useRef, KeyboardEvent } from 'react';
+import { useEffect, useContext, useRef, KeyboardEvent } from 'react';
 import { AppContext } from '../AppContext';
 import { Helmet } from 'react-helmet';
 
 export const PageLogin = () => {
-	const { appTitle, loginForm, changeLoginFormField, submitLoginForm } =
+	const { appTitle, loginForm, changeLoginFormField, submitLoginForm, clearLoginForm } =
 		useContext(AppContext);
 
 	const passwordRef = useRef() as React.RefObject<HTMLInputElement>;
@@ -23,6 +23,10 @@ export const PageLogin = () => {
 			submitLoginForm(onBadLogin);
 		}
 	};
+
+	useEffect(() => {
+		clearLoginForm();	
+	}, []);
 
 	return (
 		<div className="page pageLogin">
