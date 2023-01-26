@@ -16,11 +16,10 @@ import * as tools from './tools';
 interface IAppContext {
 	appTitle: string;
 	books: IBook[];
-	loginAsAdmin: (onSuccess: () => void, onFailure: () => void) => void;
 	password: string;
 	setPassword: (password: string) => void;
 	adminIsLoggedIn: boolean;
-	logoutAsAdmin: () => void;
+	logUserOut: () => void;
 	handleDeleteBook: (book: IBook) => void;
 	handleBookFieldChange: (
 		fieldIdCode: string,
@@ -122,39 +121,6 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		setBooks([...books]);
 	};
 
-	const loginAsAdmin = async (
-		onSuccess: () => void,
-		onFailure: () => void
-	) => {
-		try {
-			await axios.post(
-				`${backendUrl}/login`,
-				{
-					password,
-				},
-				{
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					withCredentials: true,
-				}
-			);
-			setAdminIsLoggedIn(true);
-			resetAllBooks();
-			onSuccess();
-		} catch (e: any) {
-			switch (e.code) {
-				case 'ERR_BAD_REQUEST':
-					onFailure();
-					break;
-				default:
-					break;
-			}
-			setAdminIsLoggedIn(false);
-		}
-		setPassword('');
-	};
-
 	const handleSaveEditBook = async (book: IBook) => {
 		try {
 			// save in backend
@@ -226,11 +192,9 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		setBooks([...books]);
 	};
 
-	const logoutAsAdmin = () => {
+	const logUserOut = () => {
 		(async () => {
 			try {
-				resetAllBooks();
-				setAdminIsLoggedIn(false);
 				await axios.get(`${backendUrl}/logout`, {
 					withCredentials: true,
 				});
@@ -318,11 +282,10 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 			value={{
 				appTitle,
 				books,
-				loginAsAdmin,
+				logUserOut,
 				password,
 				setPassword,
 				adminIsLoggedIn,
-				logoutAsAdmin,
 				handleDeleteBook,
 				handleBookFieldChange,
 				handleEditBook,
