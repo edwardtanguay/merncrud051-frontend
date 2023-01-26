@@ -50,6 +50,7 @@ interface IAppContext {
 	clearLoginForm: () => void;
 	currentUserIsAdmin: () => boolean;
 	memberInfo: IMemberInfo;
+	getNoAccessMessage: () => string;
 }
 
 interface IAppProvider {
@@ -325,6 +326,13 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		return currentUserIsInAccessGroup('admins');
 	};
 
+	const getNoAccessMessage = () => {
+		if (currentUserIsInAccessGroup('loggedOutUsers')) {
+			return 'Your session has ended, please log in again.';
+		} else {
+			return 'You do not have access to this page.';
+		}
+	}
 	return (
 		<AppContext.Provider
 			value={{
@@ -352,6 +360,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				clearLoginForm,
 				currentUserIsAdmin,
 				memberInfo,
+				getNoAccessMessage
 			}}
 		>
 			{children}

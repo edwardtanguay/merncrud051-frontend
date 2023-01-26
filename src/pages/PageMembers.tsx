@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { AppContext } from '../AppContext';
 
 export const PageMembers = () => {
-	const { memberInfo, currentUserIsInAccessGroup } = useContext(AppContext);
+	const { memberInfo, currentUserIsInAccessGroup, getNoAccessMessage } = useContext(AppContext);
 
 	return (
 		<div className="page pageMembers">
@@ -21,7 +21,7 @@ export const PageMembers = () => {
 					</ul>
 				</>
 			) : (
-				<div className="noAccessMessage">You have no access to this page.</div>
+					<div className="noAccessMessage">{getNoAccessMessage()}</div>
 			)}
 		</div>
 	);
