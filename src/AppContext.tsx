@@ -42,7 +42,7 @@ interface IAppContext {
 	handleSaveNewBook: () => void;
 	loginForm: ILoginForm;
 	changeLoginFormField: (fieldIdCode: string, value: string) => void;
-	submitLoginForm: () => void;
+	submitLoginForm: (onBadLogin: () => void) => void;
 	currentUser: IUser;
 	currentUserIsInAccessGroup: (accessGroup: string) => boolean;
 }
@@ -263,7 +263,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		setLoginForm({ ...loginForm });
 	};
 
-	const submitLoginForm = async () => {
+	const submitLoginForm = async (onBadLogin: () => void) => {
 		try {
 			const response = await axios.post(
 				`${backendUrl}/login`,
@@ -287,6 +287,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				loginForm.fields.password = '';
 				loginForm.message = 'Bad login, try again.';
 				setLoginForm(cloneDeep(loginForm));
+				onBadLogin();
 			}
 		} catch (e: any) {
 			console.log(`GENERAL ERROR: ${e.message}`);
