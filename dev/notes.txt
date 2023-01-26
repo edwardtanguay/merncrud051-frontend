@@ -1,5 +1,7 @@
 - x make members page
-- .. a note for members but loaded from the backend (!!!)
+- x a note for members but loaded from the backend (!!!)
+- x switch to load data in appContext
+- .. list members on members page
 - a note for unapproved members
 	- show them members page in menu
 	- but make it blank with a note, "You will be approved soon."

@@ -56,3 +56,13 @@ export const anonymousUser = {
 	lastName: 'User',
 	accessGroups: ['loggedOutUsers']
 }
+
+export interface IMemberInfo {
+	message: string;
+	members: IUser[]
+}
+
+export const blankMemberInfo = {
+	message: '',
+	members: []
+}

@@ -33,16 +33,24 @@ function App() {
 			</nav>
 
 			<Routes>
-				<Route path="/books" element={<PageBooks />} />
-				{currentUserIsInAccessGroup('loggedInUsers') && (
-					<Route path="/members" element={<PageMembers />} />
+				{currentUser.username != '' && (
+					<>
+						<Route path="/books" element={<PageBooks />} />
+						{/* {currentUserIsInAccessGroup('members') && ( */}
+						{true && (
+							<Route path="/members" element={<PageMembers />} />
+						)}
+						{currentUserIsInAccessGroup('loggedInUsers') ? (
+							<Route path="/logout" element={<PageLogout />} />
+						) : (
+							<Route path="/login" element={<PageLogin />} />
+						)}
+						<Route
+							path="/"
+							element={<Navigate to="/books" replace />}
+						/>
+					</>
 				)}
-				{currentUserIsInAccessGroup('loggedInUsers') ? (
-					<Route path="/logout" element={<PageLogout />} />
-				) : (
-					<Route path="/login" element={<PageLogin />} />
-				)}
-				<Route path="/" element={<Navigate to="/books" replace />} />
 			</Routes>
 		</div>
 	);

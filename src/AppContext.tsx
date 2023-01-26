@@ -10,6 +10,8 @@ import {
 	ILoginFormFields,
 	anonymousUser,
 	IUser,
+	blankMemberInfo,
+	IMemberInfo,
 } from './interfaces';
 import * as tools from './tools';
 import { cloneDeep } from 'lodash-es';
@@ -47,13 +49,14 @@ interface IAppContext {
 	currentUserIsInAccessGroup: (accessGroup: string) => boolean;
 	clearLoginForm: () => void;
 	currentUserIsAdmin: () => boolean;
+	memberInfo: IMemberInfo;
 }
 
 interface IAppProvider {
 	children: React.ReactNode;
 }
 
-const backendUrl:string = import.meta.env.VITE_BACKEND_URL;
+const backendUrl: string = import.meta.env.VITE_BACKEND_URL;
 
 export const AppContext = createContext<IAppContext>({} as IAppContext);
 
@@ -68,6 +71,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		cloneDeep(blankLoginForm)
 	);
 	const [currentUser, setCurrentUser] = useState<IUser>(anonymousUser);
+	const [memberInfo, setMemberInfo] = useState<IMemberInfo>(blankMemberInfo);
 
 	const navigate = useNavigate();
 
@@ -106,6 +110,19 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 			}
 		})();
 	};
+
+	// this loads data when a currentUser has been defined
+	// on page reload, currentUser is anonymous for short time
+	// then any user that is logged in is loaded into currentUser
+	useEffect(() => {
+		if (currentUserIsInAccessGroup('members')) {
+			console.log('group', currentUser.accessGroups.join(','));
+			(async () => {
+				const memberInfo = (await axios.get(`${backendUrl}/get-member-info`, { withCredentials: true})).data;
+				setMemberInfo(cloneDeep(memberInfo));
+			})();
+		}
+	}, [currentUser]);
 
 	useEffect(() => {
 		loadBooks();
@@ -306,7 +323,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 
 	const currentUserIsAdmin = () => {
 		return currentUserIsInAccessGroup('admins');
-	}
+	};
 
 	return (
 		<AppContext.Provider
@@ -333,7 +350,8 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				currentUser,
 				currentUserIsInAccessGroup,
 				clearLoginForm,
-currentUserIsAdmin
+				currentUserIsAdmin,
+				memberInfo,
 			}}
 		>
 			{children}

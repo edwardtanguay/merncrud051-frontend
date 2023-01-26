@@ -1,19 +1,28 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+import { useContext } from 'react';
+import { AppContext } from '../AppContext';
 
 export const PageMembers = () => {
-	const [memberInfo, setMemberInfo] = useState({message: ''});
+	const { memberInfo, currentUserIsInAccessGroup } = useContext(AppContext);
 
-	useEffect(() => {
-		(async () => {
-			setMemberInfo((await axios.get(`${backendUrl}/get-member-info`)).data);
-		})();
-	}, []);
 	return (
 		<div className="page pageMembers">
-			<p>{memberInfo.message}</p>
+			{currentUserIsInAccessGroup('members') ? (
+				<>
+					<h2>Message</h2>
+					<p className="message">{memberInfo.message}</p>
+
+					<h2>We currently have {memberInfo.members.length} members</h2>
+					<ul>
+						{memberInfo.members.map(member => {
+							return (
+								<li key={member._id}>{member.firstName} {member.lastName}</li>
+						)
+					})}
+					</ul>
+				</>
+			) : (
+				<div className="noAccessMessage">You have no access to this page.</div>
+			)}
 		</div>
 	);
 };
