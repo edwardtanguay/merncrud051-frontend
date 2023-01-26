@@ -1,1 +1,3 @@
 - .. show something for admins that members can't see
+
+- clean all code out that is not used

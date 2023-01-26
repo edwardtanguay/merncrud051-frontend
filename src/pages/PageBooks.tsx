@@ -17,6 +17,7 @@ export const PageBooks = () => {
 		newBook,
 		handleAddBookFieldChange,
 		handleSaveNewBook,
+		currentUserIsAdmin
 	} = useContext(AppContext);
 
 	return (
@@ -26,7 +27,7 @@ export const PageBooks = () => {
 			</Helmet>
 			{books.length > 0 && <p>There are {books.length} books:</p>}
 
-			{adminIsLoggedIn && (
+			{currentUserIsAdmin() && (
 				<>
 					{!isAdding ? (
 						<div className="addBookArea">

@@ -46,6 +46,7 @@ interface IAppContext {
 	currentUser: IUser;
 	currentUserIsInAccessGroup: (accessGroup: string) => boolean;
 	clearLoginForm: () => void;
+	currentUserIsAdmin: () => boolean;
 }
 
 interface IAppProvider {
@@ -303,6 +304,10 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		setLoginForm(cloneDeep(blankLoginForm));
 	};
 
+	const currentUserIsAdmin = () => {
+		return currentUserIsInAccessGroup('admins');
+	}
+
 	return (
 		<AppContext.Provider
 			value={{
@@ -328,6 +333,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				currentUser,
 				currentUserIsInAccessGroup,
 				clearLoginForm,
+currentUserIsAdmin
 			}}
 		>
 			{children}
