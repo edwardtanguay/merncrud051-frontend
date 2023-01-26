@@ -12,6 +12,7 @@ import {
 	IUser,
 } from './interfaces';
 import * as tools from './tools';
+import { cloneDeep } from 'lodash-es';
 
 interface IAppContext {
 	appTitle: string;
@@ -60,7 +61,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	const [adminIsLoggedIn, setAdminIsLoggedIn] = useState(false);
 	const [isAdding, setIsAdding] = useState(false);
 	const [newBook, setNewBook] = useState<IOriginalEditFields>(blankNewBook);
-	const [loginForm, setLoginForm] = useState<ILoginForm>(blankLoginForm);
+	const [loginForm, setLoginForm] = useState<ILoginForm>(cloneDeep(blankLoginForm));
 	const [currentUser, setCurrentUser] = useState<IUser>(anonymousUser);
 
 	const loadBooks = () => {
@@ -84,11 +85,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		})();
 	};
 
-	useEffect(() => {
-		loadBooks();
-	}, []);
-
-	useEffect(() => {
+	const getCurrentUser = () => {
 		(async () => {
 			try {
 				const user = (
@@ -101,6 +98,14 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				console.log('GENERAL ERROR');
 			}
 		})();
+	};
+
+	useEffect(() => {
+		loadBooks();
+	}, []);
+
+	useEffect(() => {
+		getCurrentUser();
 	}, []);
 
 	const handleCancelEditBook = (book: IBook) => {
@@ -193,11 +198,13 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	};
 
 	const logUserOut = () => {
+		setCurrentUser({ ...anonymousUser });
 		(async () => {
 			try {
 				await axios.get(`${backendUrl}/logout`, {
 					withCredentials: true,
 				});
+				getCurrentUser();
 			} catch (e: any) {
 				console.log('GENERAL ERROR');
 			}
@@ -268,14 +275,15 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 			);
 			const user = response.data;
 			setCurrentUser({ ...user });
+			setLoginForm({ ...blankLoginForm });
 		} catch (e: any) {
 			console.log(`GENERAL ERROR: ${e.message}`);
 		}
 	};
-	
+
 	const currentUserIsInAccessGroup = (accessGroup: string) => {
 		return currentUser.accessGroups.includes(accessGroup);
-	}
+	};
 
 	return (
 		<AppContext.Provider
@@ -300,7 +308,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				changeLoginFormField,
 				submitLoginForm,
 				currentUser,
-				currentUserIsInAccessGroup
+				currentUserIsInAccessGroup,
 			}}
 		>
 			{children}
