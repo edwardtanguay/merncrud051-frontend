@@ -53,7 +53,7 @@ interface IAppProvider {
 	children: React.ReactNode;
 }
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const backendUrl:string = import.meta.env.VITE_BACKEND_URL;
 
 export const AppContext = createContext<IAppContext>({} as IAppContext);
 

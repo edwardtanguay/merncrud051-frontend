@@ -1,4 +1,5 @@
-- .. make members page
+- x make members page
+- .. a note for members but loaded from the backend (!!!)
 - a note for unapproved members
 	- show them members page in menu
 	- but make it blank with a note, "You will be approved soon."
