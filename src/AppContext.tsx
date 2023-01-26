@@ -278,7 +278,14 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	};
 
 	const changeLoginFormField = (fieldIdCode: string, value: string) => {
-		loginForm.fields.username = value;
+		switch (fieldIdCode) {
+			case 'username':
+				loginForm.fields.username = value;
+				break;
+			case 'password':
+				loginForm.fields.password = value;
+				break;
+		}
 		setLoginForm({ ...loginForm });
 	};
 

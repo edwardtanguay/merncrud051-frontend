@@ -27,7 +27,7 @@ export const PageLogin = () => {
 							<div className="row">
 								<label>Password</label>
 								<div>
-									<input value={loginForm.fields.password} type="password" />
+									<input onChange={(e) => changeLoginFormField('password', e.target.value)} value={loginForm.fields.password} type="password" />
 								</div>
 							</div>
 
