@@ -13,6 +13,7 @@ import {
 } from './interfaces';
 import * as tools from './tools';
 import { cloneDeep } from 'lodash-es';
+import { useNavigate } from 'react-router-dom';
 
 interface IAppContext {
 	appTitle: string;
@@ -46,8 +47,6 @@ interface IAppContext {
 	currentUserIsInAccessGroup: (accessGroup: string) => boolean;
 }
 
-
-
 interface IAppProvider {
 	children: React.ReactNode;
 }
@@ -63,8 +62,12 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	const [adminIsLoggedIn, setAdminIsLoggedIn] = useState(false);
 	const [isAdding, setIsAdding] = useState(false);
 	const [newBook, setNewBook] = useState<IOriginalEditFields>(blankNewBook);
-	const [loginForm, setLoginForm] = useState<ILoginForm>(cloneDeep(blankLoginForm));
+	const [loginForm, setLoginForm] = useState<ILoginForm>(
+		cloneDeep(blankLoginForm)
+	);
 	const [currentUser, setCurrentUser] = useState<IUser>(anonymousUser);
+
+	const navigate = useNavigate();
 
 	const loadBooks = () => {
 		(async () => {
@@ -275,9 +278,15 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 					withCredentials: true,
 				}
 			);
-			const user = response.data;
-			setCurrentUser({ ...user });
-			setLoginForm({ ...blankLoginForm });
+			const user: IUser = response.data;
+			if (user.accessGroups.includes('loggedInUsers')) {
+				setCurrentUser({ ...user });
+				setLoginForm({ ...blankLoginForm });
+				navigate('/');
+			} else {
+				loginForm.message = 'Bad login, try again.';
+				setLoginForm(cloneDeep(loginForm));
+			}
 		} catch (e: any) {
 			console.log(`GENERAL ERROR: ${e.message}`);
 		}
