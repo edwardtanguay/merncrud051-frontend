@@ -7,16 +7,18 @@ import { PageLogin } from './pages/PageLogin';
 import { PageLogout } from './pages/PageLogout';
 
 function App() {
-	const { adminIsLoggedIn, currentUser } = useContext(AppContext);
+	const { adminIsLoggedIn, currentUser, currentUserIsInAccessGroup } =
+		useContext(AppContext);
 	return (
 		<div className="App">
 			<h1>Book Site</h1>
-			<div className="userArea">
-				<span>
-					{currentUser.firstName} {currentUser.lastName} (ACCESS
-					GROUPS: {currentUser.accessGroups.join(', ')})
-				</span>
-			</div>
+			{currentUserIsInAccessGroup('loggedInUsers') && (
+				<div className="userArea">
+					<span>
+						{currentUser.firstName} {currentUser.lastName} (ACCESS GROUPS: {currentUser.accessGroups.join(', ')})
+					</span>
+				</div>
+			)}
 			<nav>
 				<NavLink to="/books">Books</NavLink>
 				{adminIsLoggedIn ? (

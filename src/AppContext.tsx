@@ -43,6 +43,7 @@ interface IAppContext {
 	changeLoginFormField: (fieldIdCode: string, value: string) => void;
 	submitLoginForm: () => void;
 	currentUser: IUser;
+	currentUserIsInAccessGroup: (accessGroup: string) => boolean;
 }
 
 interface IAppProvider {
@@ -96,9 +97,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 						withCredentials: true,
 					})
 				).data;
-				if (user === 'admin') {
-					setAdminIsLoggedIn(true);
-				}
+				setCurrentUser({ ...user });
 			} catch (e: any) {
 				console.log('GENERAL ERROR');
 			}
@@ -303,11 +302,16 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 					withCredentials: true,
 				}
 			);
-			console.log(response.data);
+			const user = response.data;
+			setCurrentUser({ ...user });
 		} catch (e: any) {
 			console.log(`GENERAL ERROR: ${e.message}`);
 		}
 	};
+	
+	const currentUserIsInAccessGroup = (accessGroup: string) => {
+		return currentUser.accessGroups.includes(accessGroup);
+	}
 
 	return (
 		<AppContext.Provider
@@ -333,6 +337,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				changeLoginFormField,
 				submitLoginForm,
 				currentUser,
+				currentUserIsInAccessGroup
 			}}
 		>
 			{children}
