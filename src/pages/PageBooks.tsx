@@ -130,7 +130,7 @@ export const PageBooks = () => {
 										<div className="language">
 											{book.languageText}
 										</div>
-										{adminIsLoggedIn && (
+										{currentUserIsAdmin() && (
 											<div className="buttonArea">
 												<button
 													type="button"
