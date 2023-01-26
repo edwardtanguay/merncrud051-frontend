@@ -1,13 +1,1 @@
-- x create currentUser as state variable
-- x show user info below site name (name and groups)
-- x logout
-- x clear login form after login
-- x navigate to home page on login (with callbacks)
-
-- .. check bad logins
-	- .. user ok, password bad
-	- user bad
-
-- when click on login page, delete form fields
-
-- show something for admins that members can't see
+- .. show something for admins that members can't see
