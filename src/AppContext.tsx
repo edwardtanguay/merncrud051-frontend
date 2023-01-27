@@ -22,9 +22,6 @@ import { useNavigate } from 'react-router-dom';
 interface IAppContext {
 	appTitle: string;
 	books: IBook[];
-	password: string;
-	setPassword: (password: string) => void;
-	adminIsLoggedIn: boolean;
 	logUserOut: () => void;
 	handleDeleteBook: (book: IBook) => void;
 	handleBookFieldChange: (
@@ -68,8 +65,6 @@ export const AppContext = createContext<IAppContext>({} as IAppContext);
 export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 	const [books, setBooks] = useState<IBook[]>([]);
 	const appTitle = 'Book Site';
-	const [password, setPassword] = useState('');
-	const [adminIsLoggedIn, setAdminIsLoggedIn] = useState(false);
 	const [isAdding, setIsAdding] = useState(false);
 	const [newBook, setNewBook] = useState<IOriginalEditFields>(blankNewBook);
 	const [loginForm, setLoginForm] = useState<ILoginForm>(
@@ -205,7 +200,6 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 					console.log('GENERAL ERROR');
 					break;
 			}
-			setAdminIsLoggedIn(false);
 		}
 	};
 
@@ -235,7 +229,6 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 					console.log('GENERAL ERROR');
 					break;
 			}
-			setAdminIsLoggedIn(false);
 		}
 	};
 
@@ -296,7 +289,6 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 			setNewBook({ ...blankNewBook });
 		} catch (e: any) {
 			console.log('GENERAL ERROR');
-			setAdminIsLoggedIn(false);
 		}
 	};
 
@@ -381,9 +373,6 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				appTitle,
 				books,
 				logUserOut,
-				password,
-				setPassword,
-				adminIsLoggedIn,
 				handleDeleteBook,
 				handleBookFieldChange,
 				handleEditBook,

@@ -1,5 +1,3 @@
-
-
 export const randomizeArray = (array: any[]) => {
 	let currentIndex = array.length, randomIndex;
 	while (currentIndex != 0) {

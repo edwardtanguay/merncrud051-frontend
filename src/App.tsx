@@ -9,7 +9,7 @@ import { PageMembers } from './pages/PageMembers';
 import { PageAdmins } from './pages/PageAdmins';
 
 function App() {
-	const { adminIsLoggedIn, currentUser, currentUserIsInAccessGroup } =
+	const { currentUser, currentUserIsInAccessGroup } =
 		useContext(AppContext);
 	return (
 		<div className="App">

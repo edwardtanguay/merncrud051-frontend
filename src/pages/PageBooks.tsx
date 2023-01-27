@@ -6,7 +6,6 @@ export const PageBooks = () => {
 	const {
 		appTitle,
 		books,
-		adminIsLoggedIn,
 		handleDeleteBook,
 		handleBookFieldChange,
 		handleEditBook,
