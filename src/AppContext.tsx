@@ -117,10 +117,7 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		})();
 	};
 
-	// this loads data when a currentUser has been defined
-	// on page reload, currentUser is anonymous for short time
-	// then any user that is logged in is loaded into currentUser
-	useEffect(() => {
+	const loadAccessGroupData = () => {
 		if (currentUserIsInAccessGroup('members')) {
 			(async () => {
 				const memberInfo = (
@@ -141,6 +138,13 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 				setAdminInfo(cloneDeep(adminInfo));
 			})();
 		}
+	};
+
+	// this loads data when a currentUser has been defined
+	// on page reload, currentUser is anonymous for short time
+	// then any user that is logged in is loaded into currentUser
+	useEffect(() => {
+		loadAccessGroupData();
 	}, [currentUser]);
 
 	useEffect(() => {
@@ -352,9 +356,25 @@ export const AppProvider: React.FC<IAppProvider> = ({ children }) => {
 		}
 	};
 
-	const handleApproveMember = (member: IUser) => {
-		console.log('approving ' + member.username);
-	}
+	const handleApproveMember = async (member: IUser) => {
+		try {
+			const response = await axios.patch(
+				`${backendUrl}/approve-member`,
+				{
+					_id: member._id,
+				},
+				{
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					withCredentials: true,
+				}
+			);
+			loadAccessGroupData();
+		} catch (e: any) {
+			console.log(`GENERAL ERROR: ${e.message}`);
+		}
+	};
 	return (
 		<AppContext.Provider
 			value={{
