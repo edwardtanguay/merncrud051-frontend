@@ -1,8 +1,8 @@
-# Fullstack MERN site which allows user to add/edit/delete items via CRUD API using MongoDB and TypeScript/ES6-Modules on frontend/backend
+# Fullstack MERN site which allows multiple users to add/edit/delete items via CRUD API using MongoDB and TypeScript/ES6-Modules on frontend/backend
 
-This starter is not only a good way to learn the basic skills of building a full-stack MERN site with admin login and item editing, but you can also use this site as a basis to create sites where you can log in as admin, edit/delete/add items and then log out again. Since it uses React, this is ideal for making an app-like site on your smart phone that you log into on the go to change and add information. There is only one user (admin), the password is saved in text in the backend .env file. In this way, the app is simplified for learning purposes but this site could be used for a wide range of personal or company and sites that need to have an admin keep the site up-to-date with new information.
+This starter is a base fullstack MERN site that allows you to have multiple users who can log into the site and see different pages (using React Router) and accomplish different tasks (e.g. admins can delete, edit and addd items). The backend is an API built on Node/Express saving data to a MongoDB database using Mongoose. ES6 modules and TypeScript are used on both backend and frontend (a React site created with Vite). Passwords are saved as hashes in the database with bcrypt. The app is simplified for learning purposes but is ready to use as a basis for any site that needs to have multiple users log in, view various data, and change data.
 
-![grafik](https://starters.tanguay.eu/images/starters/mernMongooseBookCrudFullstack.png)
+![grafik](https://starters.tanguay.eu/images/starters/fullstackMernCrudWithMultipleUsersAndSessions.png)
 
 ## features
 
@@ -12,9 +12,10 @@ This starter is not only a good way to learn the basic skills of building a full
 	- TypeScript / ES6 modules
 	- React Router
 	- useContext
-	- admin login with password
+	- multiuser login with password
 	- react-helmet
 	- axios 
+  - lodash (cloneDeep)
 
 - **backend:** 
 	- Node/Express 
@@ -23,24 +24,26 @@ This starter is not only a good way to learn the basic skills of building a full
 	- cookie/session authentication
 	- MongoDB (local or Atlas)
 	- Mongoose
-	- no try/catch error handling for learning simplicity
+	- bcrypt for hasing passwords
+  - CLI command to create bcrypt hashes
+  - authorization pattern: accessGroups with anonymousUser
 
 ## CREATE ONE PROJECT FOR BOTH BACKEND AND FRONTEND
 
 - open your terminal and go to your project directory
 - create a directory for this project, e.g.
-  - `mkdir et-mern-crud-site`
+  - `mkdir merncrudmulti`
 
 ## INSTALL BACKEND
 
 ### set up directory and editor for backend
 
 - enter your project directory
-  - `cd et-mern-crud-site`
+  - `cd merncrudmulti`
 - create backend directory
-  - `git clone git@github.com:edwardtanguay/et-mern-crud-site-backend.git et-mern-crud-site-backend`
+  - `git clone git@github.com:edwardtanguay/merncrud051-backend.git merncrudmulti-backend`
 - open VSCode in the backend directory
-  - `code et-mern-crud-site-backend`
+  - `code merncrudmulti-backend`
 - open VSCode terminal
 - install node_modules
   - `npm i`
@@ -56,9 +59,11 @@ This starter is not only a good way to learn the basic skills of building a full
 
 ### create database
 
-- in your MongoDB Atlas cluster, create a MongoDB database with the name of your project, e.g. `et-mern-crud-site`
+- in your MongoDB Atlas cluster, create a MongoDB database with the name of your project, e.g. `merncrudmulti`
 - create a collection in it called `books`
-- import the file `dev/books.json` into the collection `books` (e.g. with MongoDB Compass)
+- with MongoDB Compass, import the file `dev/books.json` into the collection `books`
+- create a collection in it called `users`
+- with MongoDB Compass, import the file `dev/users.json` into the collection `users`
 
 ### create .env file for backend
 
@@ -66,41 +71,35 @@ This starter is not only a good way to learn the basic skills of building a full
 
   ``` text
   APP_NAME = Book Site API
-  SECONDS_TILL_SESSION_TIMEOUT = 3600 
-  PORT = 5001
-  MONGODB_CONNECTION = mongodb+srv://USERNAME:PASSWORD@cluster0.ogshn.mongodb.net/DATABASENAME?retryWrites=true&w=majority
-  SESSION_SECRET = RANDOMSTRING
-  ADMIN_PASSWORD = ADMINPASSWORD
-  FRONTEND_URL = http://localhost:5002
+  SECONDS_TILL_SESSION_TIMEOUT = 3600
+  PORT = 3210
+  MONGODB_CONNECTION = mongodb://localhost:27017/merncrudmulti
+  SESSION_SECRET = 8234skdfj2834
+  FRONTEND_URL = http://localhost:3211
   NODE_ENVIRONMENT = development
   ```
 
-- replace all capitalized variables with appropriate data
-  - USERNAME
-  - PASSWORD
-  - DATABASENAME
-  - RANDOMSTRING
-  - ADMINPASSWORD
 - you can also change the backend/frontend ports if you need to, e.g. to avoid conflicts
 
 
 ### start and test the backend
 
 - `npm run dev`
-- click on URL shown in the terminal (e.g. http://localhost:5001)
+- click on URL shown in the terminal (e.g. http://localhost:3210)
 - click on `/books` link
 - change data in your MongoDB database to see that the changes are reflected in the browser
+- to test individual routes, see the `test.rest` file (you need the VSCode extension [Rest Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client))
 
 ## INSTALL FRONTEND
 
 ### set up directory and editor for frontend
 
 - enter your project directory
-  - `cd et-mern-crud-site`
+  - `cd merncrudmulti`
 - create frontend directory
-  - `git clone git@github.com:edwardtanguay/et-mern-crud-site-frontend.git et-mern-crud-site-frontend`
+  - `git clone git@github.com:edwardtanguay/merncrud051-frontend.git merncrudmulti-frontend`
 - open VSCode in the frontend directory
-  - `code et-mern-crud-site-frontend`
+  - `code merncrudmulti-frontend`
 - open VSCode terminal
 - install node_modules
   - `npm i`
@@ -120,7 +119,7 @@ This starter is not only a good way to learn the basic skills of building a full
 - copy in the following content and change backend port if necessary
 
   ``` text
-  VITE_BACKEND_URL = http://localhost:5001
+  VITE_BACKEND_URL = http://localhost:3210
   ```
   
 ### start the frontend
@@ -131,15 +130,15 @@ This starter is not only a good way to learn the basic skills of building a full
 
 ## DEPLOY BACKEND TO LINUX CLOUD SERVER AT HETZNER
 
-- in your npm scripts, change all references of `et-mern-crud-site` to your site name
+- in your npm scripts, change all references of `merncrudmulti` to your site name
 
   ``` text
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "setup": "pm2 start --name et-mern-crud-site-backend npm -- start",
+    "setup": "pm2 start --name merncrudmulti-backend npm -- start",
     "start": "node dist/server.js",
-    "deploy": "git pull --no-rebase && npm i && npm run build && pm2 restart et-mern-crud-site-backend --update-env --time && pm2 save"
+    "deploy": "git pull --no-rebase && npm i && npm run build && pm2 restart merncrudmulti-backend --update-env --time && pm2 save"
   },
   ```
 
@@ -148,26 +147,25 @@ This starter is not only a good way to learn the basic skills of building a full
 - go to your web projects directory, e.g.
   - e.g. `/var/www`
 - clone your repository there
-  - e.g. `git clone git@github.com:edwardtanguay/et-mern-crud-site-backend.git`
+  - e.g. `git clone git@github.com:edwardtanguay/merncrudmulti-backend.git`
 - navigate into your backend project directory
-  - e.g. `cd et-mern-crud-site-backend`
+  - e.g. `cd merncrudmulti-backend`
 - set up `.env` file
   - replace all capitalized variables with appropriate data
     - USERNAME
     - PASSWORD
+	- CLUSTERNAME
     - DATABASENAME
     - RANDOMSTRING
-    - ADMINPASSWORD
   - change the FRONTEND_URL appropriately
 
   ``` text
   APP_NAME = Book Site API
   SECONDS_TILL_SESSION_TIMEOUT = 3600 
-  PORT = 5001
-  MONGODB_CONNECTION = mongodb+srv://USERNAME:PASSWORD@cluster0.ogshn.mongodb.net/DATABASENAME?retryWrites=true&w=majority
+  PORT = 3210
+  MONGODB_CONNECTION = mongodb+srv://USERNAME:PASSWORD@cluster0.CLUSTERNAME.mongodb.net/DATABASENAME?retryWrites=true&w=majority
   SESSION_SECRET = RANDOMSTRING
-  ADMIN_PASSWORD = ADMINPASSWORD
-  FRONTEND_URL = https://et-mern-crud-site.tanguay.eu
+  FRONTEND_URL = https://merncrudmulti.tanguay.eu
   NODE_ENVIRONMENT = production
   ```
 
@@ -176,19 +174,19 @@ This starter is not only a good way to learn the basic skills of building a full
 - deploy your site
   - `npm run deploy`
 - test that your application is running
-  - in your firewall, add incoming rule for port 5001
-  - in your browser, go to e.g. `http://tanguay.eu:5001` (not https)
+  - in your firewall, add incoming rule for port 3210
+  - in your browser, go to e.g. `http://tanguay.eu:3210` (not https)
   - you should see your backend running in the browser
   - in your firewall, remove the rule again
-- set up a subdomain for your site, e.g. `et-mern-crud-site-backend.tanguay.eu`
+- set up a subdomain for your site, e.g. `merncrudmulti-backend.tanguay.eu`
 - create nginx config file for your backend site
-  - e.g. `/etc/nginx/conf.d/et-mern-crud-site-backend.conf`
+  - e.g. `/etc/nginx/conf.d/merncrudmulti-backend.conf`
 
     ``` text
     server {
-            server_name et-mern-crud-site-backend.tanguay.eu;
+            server_name merncrudmulti-backend.tanguay.eu;
             location / {
-                    proxy_pass http://tanguay.eu:5001;
+                    proxy_pass http://tanguay.eu:3210;
             }
     }
     ```
@@ -198,11 +196,11 @@ This starter is not only a good way to learn the basic skills of building a full
   - choose the number of your site
 - restart the nginx server
   - `sudo systemctl restart nginx`
-- in your browser, go to your site at e.g. [https://et-mern-crud-site-backend.tanguay.eu](https://et-mern-crud-site-backend.tanguay.eu)
+- in your browser, go to your site at e.g. [https://merncrudmulti-backend.tanguay.eu](https://merncrudmulti-backend.tanguay.eu)
 
 ## DEPLOY FRONTEND TO LINUX CLOUD SERVER AT HETZNER
 
-- in your npm scripts, change all references of `et-mern-crud-site` to your site name
+- in your npm scripts, change all references of `merncrudmulti` to your site name
 
   ``` text
   "scripts": {
@@ -210,9 +208,9 @@ This starter is not only a good way to learn the basic skills of building a full
     "build": "tsc && vite build",
     "preview": "vite preview",
     "cp": "node cli/cp.mjs",
-    "setup": "pm2 start --name et-mern-crud-site-frontend npm -- start",
-    "start": "vite preview --host --port 5002",
-    "deploy": "git pull --no-rebase && npm i && npm run build && pm2 restart et-mern-crud-site-frontend --update-env --time && pm2 save"
+    "setup": "pm2 start --name merncrudmulti-frontend npm -- start",
+    "start": "vite preview --host --port 3211",
+    "deploy": "git pull --no-rebase && npm i && npm run build && pm2 restart merncrudmulti-frontend --update-env --time && pm2 save"
   },
   ```
   
@@ -225,13 +223,13 @@ This starter is not only a good way to learn the basic skills of building a full
 - go to your web projects directory, e.g.
   - e.g. `/var/www`
 - clone your repository there
-  - e.g. `git clone git@github.com:edwardtanguay/et-mern-crud-site-frontend.git`
+  - e.g. `git clone git@github.com:edwardtanguay/merncrudmulti-frontend.git`
 - navigate into your frontend project directory
-  - e.g. `cd et-mern-crud-site-frontend`
+  - e.g. `cd merncrudmulti-frontend`
 - create a `.env` file with the URL of the backend that you just set up
 
   ``` text
-  VITE_BACKEND_URL = https://et-mern-crud-site-backend.tanguay.eu
+  VITE_BACKEND_URL = https://merncrudmulti-backend.tanguay.eu
   ```
 
 - set up the site in pm2
@@ -239,19 +237,19 @@ This starter is not only a good way to learn the basic skills of building a full
 - deploy your site
   - `npm run deploy`
 - test that your application is running
-  - in your firewall, add incoming rule for port 5002
-  - in your browser, go to e.g. `http://tanguay.eu:5002` (not https)
+  - in your firewall, add incoming rule for port 3211
+  - in your browser, go to e.g. `http://tanguay.eu:3211` (not https)
   - you should see your frontend running in the browser
   - in your firewall, remove the rule again
-- set up a subdomain for your site, e.g. `et-mern-crud-site.tanguay.eu` (without `-frontend`)
+- set up a subdomain for your site, e.g. `merncrudmulti.tanguay.eu` (without `-frontend`)
 - create nginx config file for your frontend site
-  - e.g. `/etc/nginx/conf.d/et-mern-crud-site.conf` (without `-frontend`)
+  - e.g. `/etc/nginx/conf.d/merncrudmulti-frontend.conf`
 
     ``` text
     server {
-            server_name et-mern-crud-site.tanguay.eu;
+            server_name merncrudmulti.tanguay.eu;
             location / {
-                    proxy_pass http://tanguay.eu:5002;
+                    proxy_pass http://tanguay.eu:3211;
             }
     }
     ```
@@ -261,7 +259,8 @@ This starter is not only a good way to learn the basic skills of building a full
   - choose the number of your site
 - restart the nginx server
   - `sudo systemctl restart nginx`
-- in your browser, go to your site at e.g. [https://et-mern-crud-site.tanguay.eu](https://et-mern-crud-site.tanguay.eu)
+- in your browser, go to your site at e.g. [https://merncrudmulti.tanguay.eu](https://merncrudmulti.tanguay.eu)
+
 
 ## more starters, templates and frameworks
 
